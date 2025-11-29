@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WanderSphere SRS Presentation</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;900&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+  overflow: hidden;
+  background: #0f172a;
+  position: relative;
+}
+
+/* Animated gradient background */
+.bg-gradient {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #4facfe 75%, #00f2fe 100%);
+  background-size: 400% 400%;
+  animation: gradientShift 20s ease infinite;
+  z-index: 0;
+}
+
+@keyframes gradientShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* Floating particles */
+.particle {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  animation: float 15s infinite ease-in-out;
+  z-index: 1;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0) translateX(0) scale(1); opacity: 0.3; }
+  50% { transform: translateY(-100px) translateX(50px) scale(1.2); opacity: 0.6; }
+}
+
+.container {
+  position: relative;
+  z-index: 2;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.slide {
+  position: absolute;
+  width: 85%;
+  max-width: 1200px;
+  height: 85vh;
+  padding: 60px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border-radius: 30px;
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.4);
+  opacity: 0;
+  transform: scale(0.9) rotateY(10deg);
+  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow-y: auto;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.slide.active {
+  opacity: 1;
+  transform: scale(1) rotateY(0deg);
+}
+
+.slide.exit-left {
+  animation: exitLeft 0.6s ease forwards;
+}
+
+.slide.exit-right {
+  animation: exitRight 0.6s ease forwards;
+}
+
+@keyframes exitLeft {
+  to { transform: translateX(-100%) scale(0.8); opacity: 0; }
+}
+
+@keyframes exitRight {
+  to { transform: translateX(100%) scale(0.8); opacity: 0; }
+}
+
+/* Typography */
+h1 {
+  font-family: "Playfair Display", serif;
+  font-size: 52px;
+  font-weight: 900;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 30px;
+  animation: fadeInUp 0.8s ease;
+}
+
+h2 {
+  font-size: 38px;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 25px;
+  position: relative;
+  display: inline-block;
+  animation: fadeInUp 0.8s ease 0.2s both;
+}
+
+h2::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  width: 60px;
+  height: 4px;
+  background: linear-gradient(90deg, #667eea, #764ba2);
+  border-radius: 2px;
+  animation: expandWidth 0.8s ease 0.5s both;
+}
+
+@keyframes expandWidth {
+  from { width: 0; }
+  to { width: 60px; }
+}
+
+h3 {
+  font-size: 24px;
+  font-weight: 600;
+  color: #475569;
+  margin-bottom: 20px;
+  animation: fadeInUp 0.8s ease 0.3s both;
+}
+
+p {
+  font-size: 20px;
+  line-height: 1.8;
+  color: #334155;
+  animation: fadeInUp 0.8s ease 0.4s both;
+}
+
+/* List styling */
+ul {
+  list-style: none;
+  margin-top: 30px;
+}
+
+ul li {
+  font-size: 22px;
+  color: #334155;
+  padding: 18px 25px;
+  margin: 15px 0;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+  border-left: 4px solid #667eea;
+  border-radius: 12px;
+  opacity: 0;
+  transform: translateX(-30px);
+  animation: slideInLeft 0.6s ease forwards;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+ul li::before {
+  content: '✦';
+  position: absolute;
+  left: -25px;
+  color: #667eea;
+  font-size: 24px;
+  transition: left 0.3s ease;
+}
+
+ul li:hover {
+  transform: translateX(10px);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.2), rgba(118, 75, 162, 0.2));
+}
+
+ul li:hover::before {
+  left: 8px;
+}
+
+ul li:nth-child(1) { animation-delay: 0.5s; }
+ul li:nth-child(2) { animation-delay: 0.6s; }
+ul li:nth-child(3) { animation-delay: 0.7s; }
+ul li:nth-child(4) { animation-delay: 0.8s; }
+ul li:nth-child(5) { animation-delay: 0.9s; }
+ul li:nth-child(6) { animation-delay: 1s; }
+
+@keyframes slideInLeft {
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Team members special styling */
+.team-info {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.15), rgba(118, 75, 162, 0.15));
+  padding: 30px;
+  border-radius: 20px;
+  margin: 20px 0;
+  animation: fadeInUp 0.8s ease 0.5s both;
+}
+
+.team-info b {
+  color: #667eea;
+  font-weight: 600;
+}
+
+.subtitle {
+  font-size: 28px;
+  font-weight: 700;
+  background: linear-gradient(135deg, #f093fb, #4facfe);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-top: 30px;
+  animation: fadeInUp 0.8s ease 0.6s both;
+}
+
+/* Navigation */
+.nav-btn {
+  position: fixed;
+  bottom: 40px;
+  padding: 15px 35px;
+  font-size: 18px;
+  font-weight: 600;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+  transition: all 0.3s ease;
+  z-index: 100;
+  font-family: "Poppins", sans-serif;
+}
+
+.nav-btn:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 15px 40px rgba(102, 126, 234, 0.6);
+}
+
+.nav-btn:active {
+  transform: translateY(0) scale(0.98);
+}
+
+#prevBtn { left: 40px; }
+#nextBtn { right: 40px; }
+
+/* Progress indicator */
+.progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
+  transition: width 0.3s ease;
+  z-index: 1000;
+  box-shadow: 0 2px 10px rgba(102, 126, 234, 0.5);
+}
+
+.slide-counter {
+  position: fixed;
+  top: 30px;
+  right: 40px;
+  font-size: 18px;
+  font-weight: 600;
+  color: white;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 10px 20px;
+  border-radius: 50px;
+  backdrop-filter: blur(10px);
+  z-index: 100;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Icon animations */
+.icon {
+  display: inline-block;
+  margin-right: 10px;
+  font-size: 24px;
+  animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .slide {
+    width: 95%;
+    padding: 30px;
+  }
+  
+  h1 { font-size: 36px; }
+  h2 { font-size: 28px; }
+  ul li { font-size: 18px; }
+  
+  .nav-btn {
+    bottom: 20px;
+    padding: 12px 25px;
+    font-size: 16px;
+  }
+  
+  #prevBtn { left: 20px; }
+  #nextBtn { right: 20px; }
+}
+</style>
+</head>
+<body>
+
+<div class="bg-gradient"></div>
+
+<!-- Floating particles -->
+<script>
+for(let i = 0; i < 30; i++) {
+  const particle = document.createElement('div');
+  particle.className = 'particle';
+  particle.style.width = Math.random() * 60 + 20 + 'px';
+  particle.style.height = particle.style.width;
+  particle.style.left = Math.random() * 100 + '%';
+  particle.style.top = Math.random() * 100 + '%';
+  particle.style.animationDelay = Math.random() * 15 + 's';
+  particle.style.animationDuration = Math.random() * 10 + 10 + 's';
+  document.querySelector('.bg-gradient').appendChild(particle);
+}
+</script>
+
+<div class="progress-bar" id="progressBar"></div>
+<div class="slide-counter" id="slideCounter">1 / 13</div>
+
+<div class="container">
+
+<!-- SLIDES -->
+<div class="slide active">
+  <h1>✈️ WanderSphere</h1>
+  <h3>Project Team Members</h3>
+  <div class="team-info">
+    <p>
+      <b>Sragvi Sai</b> — 245323733143<br>
+      <b>Saad</b> — 245323733321<br>
+      <b>Sudhanva</b> — 245323733175<br>
+      <b>Vinay</b> — 245323733144<br>
+      <b>Shreehith</b> — 245323733137<br>
+      <b>Lakshmikanth</b> — 245323733177
+    </p>
+  </div>
+  <p class="subtitle">MERN + Firebase + Gemini AI Based Travel Planning Platform</p>
+</div>
+
+<div class="slide">
+  <h1>WanderSphere</h1>
+  <h2>Software Requirements Specification</h2>
+  <h3>Dynamic Travel Discovery Platform with AI-Powered Itinerary Generation</h3>
+</div>
+
+<div class="slide">
+  <h2><span class="icon">🎯</span>1.1 Purpose</h2>
+  <ul>
+    <li>Dynamic travel discovery platform for exploring destinations worldwide</li>
+    <li>AI-powered itinerary generation using Gemini API</li>
+    <li>Secure Firebase authentication system</li>
+    <li>Real-time Firestore database integration</li>
+  </ul>
+</div>
+
+<div class="slide">
+  <h2><span class="icon">🌐</span>1.2 Scope</h2>
+  <ul>
+    <li>Full-stack MERN web application</li>
+    <li>Firebase Authentication + Firestore Database</li>
+    <li>Protected routes for user privacy</li>
+    <li>Razorpay payment gateway integration</li>
+  </ul>
+</div>
+
+<div class="slide">
+  <h2><span class="icon">📖</span>1.3 Definitions</h2>
+  <ul>
+    <li>MERN: MongoDB, Express, React, Node.js stack</li>
+    <li>Firestore: NoSQL cloud database by Firebase</li>
+    <li>API: Application Programming Interface</li>
+    <li>Itinerary: Detailed travel plan with activities</li>
+    <li>Protected Route: Authentication-required pages</li>
+  </ul>
+</div>
+
+<div class="slide">
+  <h2><span class="icon">⚙️</span>2.1 System Overview</h2>
+  <ul>
+    <li>React frontend with modern UI components</li>
+    <li>Node.js & Express backend server</li>
+    <li>Firebase services for auth & database</li>
+    <li>Gemini AI API for intelligent responses</li>
+  </ul>
+</div>
+
+<div class="slide">
+  <h2><span class="icon">✨</span>2.2 Key Features</h2>
+  <ul>
+    <li>User Registration & Secure Login</li>
+    <li>Explore Destinations Worldwide</li>
+    <li>Add Destinations to Personal Wishlist</li>
+    <li>Admin Dashboard for Management</li>
+    <li>AI-Powered Itinerary Chatbot</li>
+  </ul>
+</div>
+
+<div class="slide">
+  <h2><span class="icon">💻</span>3.1 Software Requirements</h2>
+  <ul>
+    <li>React with Vite & Tailwind CSS</li>
+    <li>Node.js v16+ & Express framework</li>
+    <li>Firebase SDK for web applications</li>
+    <li>Google Gemini AI API integration</li>
+  </ul>
+</div>
+
+<div class="slide">
+  <h2><span class="icon">🖥️</span>3.2 Hardware Requirements</h2>
+  <ul>
+    <li>Any modern laptop or desktop computer</li>
+    <li>Minimum 4GB RAM (8GB recommended)</li>
+    <li>Stable internet connection required</li>
+  </ul>
+</div>
+
+<div class="slide">
+  <h2><span class="icon">🔐</span>4.1 Functional Requirements</h2>
+  <h3>Authentication System</h3>
+  <ul>
+    <li>User registration with email validation</li>
+    <li>Username & password-based login</li>
+    <li>Protected dashboard access control</li>
+    <li>Secure logout functionality</li>
+  </ul>
+</div>
+
+<div class="slide">
+  <h2><span class="icon">🗺️</span>4.2 Functional Requirements</h2>
+  <h3>Destinations & Wishlist</h3>
+  <ul>
+    <li>Browse all available destinations</li>
+    <li>View detailed destination information</li>
+    <li>Add destinations to personal wishlist</li>
+    <li>Remove items from wishlist easily</li>
+  </ul>
+</div>
+
+<div class="slide">
+  <h2><span class="icon">🤖</span>4.3 Functional Requirements</h2>
+  <h3>AI & Payment Systems</h3>
+  <ul>
+    <li>AI-powered travel itinerary generation</li>
+    <li>Real-time Gemini API integration</li>
+    <li>Secure Razorpay payment gateway</li>
+    <li>Transaction history tracking</li>
+  </ul>
+</div>
+
+<div class="slide">
+  <h2><span class="icon">🛡️</span>5. Non-Functional Requirements</h2>
+  <ul>
+    <li>Security: End-to-end encryption & secure authentication</li>
+    <li>Scalability: Handle growing user base efficiently</li>
+    <li>Performance: Fast page loads under 3 seconds</li>
+    <li>Usability: Intuitive interface for all users</li>
+    <li>Availability: 99.9% uptime guarantee</li>
+  </ul>
+</div>
+
+</div>
+
+<button id="prevBtn" class="nav-btn" onclick="prevSlide()">← Previous</button>
+<button id="nextBtn" class="nav-btn" onclick="nextSlide()">Next →</button>
+
+<script>
+let currentSlide = 0;
+const slides = document.querySelectorAll(".slide");
+const totalSlides = slides.length;
+const progressBar = document.getElementById("progressBar");
+const slideCounter = document.getElementById("slideCounter");
+
+function updateProgress() {
+  const progress = ((currentSlide + 1) / totalSlides) * 100;
+  progressBar.style.width = progress + '%';
+  slideCounter.textContent = `${currentSlide + 1} / ${totalSlides}`;
+}
+
+function showSlide(n) {
+  slides.forEach((slide, index) => {
+    slide.classList.remove("active", "exit-left", "exit-right");
+    
+    if (index === n) {
+      setTimeout(() => slide.classList.add("active"), 50);
+    }
+  });
+  
+  updateProgress();
+}
+
+function nextSlide() {
+  if (currentSlide < slides.length - 1) {
+    slides[currentSlide].classList.add("exit-left");
+    currentSlide++;
+    showSlide(currentSlide);
+  }
+}
+
+function prevSlide() {
+  if (currentSlide > 0) {
+    slides[currentSlide].classList.add("exit-right");
+    currentSlide--;
+    showSlide(currentSlide);
+  }
+}
+
+document.addEventListener("keydown", function(event) {
+  if (event.key === "ArrowRight") nextSlide();
+  if (event.key === "ArrowLeft") prevSlide();
+});
+
+// Touch support for mobile
+let touchStartX = 0;
+let touchEndX = 0;
+
+document.addEventListener('touchstart', e => {
+  touchStartX = e.changedTouches[0].screenX;
+});
+
+document.addEventListener('touchend', e => {
+  touchEndX = e.changedTouches[0].screenX;
+  if (touchStartX - touchEndX > 50) nextSlide();
+  if (touchEndX - touchStartX > 50) prevSlide();
+});
+
+updateProgress();
+</script>
+
+</body>
+</html>

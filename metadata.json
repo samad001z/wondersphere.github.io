@@ -1,0 +1,7 @@
+{
+  "name": "WanderSphere",
+  "description": "A dynamic, visually stunning travel destination explorer and itinerary planner powered by AI.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
