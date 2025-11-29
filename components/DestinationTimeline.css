@@ -1,0 +1,25 @@
+.destination-timeline {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.destination-timeline .event {
+  margin: 10px 0;
+  padding: 10px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+}
+
+.destination-timeline .event .date {
+  font-weight: bold;
+  color: #333;
+}
+
+.destination-timeline .event .description {
+  color: #666;
+}
